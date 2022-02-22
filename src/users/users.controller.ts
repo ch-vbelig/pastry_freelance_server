@@ -1,11 +1,14 @@
 import {Body, Controller, Get, Param, Post, Request, UseGuards} from "@nestjs/common";
 import {UsersService} from "./users.service";
-import {AuthGuard} from "@nestjs/passport";
+import {LocalAuthGuard} from "../auth/local-auth.guard";
+import {JwtAuthGuard} from "../auth/jwt-auth.guard";
 
 @Controller('users')
 export class UsersController {
 
-    constructor(private readonly usersService: UsersService) {
+    constructor(
+        private readonly usersService: UsersService,
+    ) {
     }
 
     @Post("register")
@@ -13,9 +16,16 @@ export class UsersController {
         return this.usersService.saveOne(user)
     }
 
-    @UseGuards(AuthGuard('local'))
+    @UseGuards(LocalAuthGuard)
     @Post("login")
     async loginUser(@Request() req) {
+        // return access_token
+        return req.user.access_token
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Post('profile')
+    async getProfile(@Request() req){
         return this.usersService.findById(req.user.id)
     }
 

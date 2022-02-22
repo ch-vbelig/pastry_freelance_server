@@ -9,8 +9,7 @@ export class UsersService {
     constructor(
         @InjectRepository(User)
         private usersRepository: Repository<User>
-    ) {
-    }
+    ) { }
 
     async saveOne(user: User): Promise<User> {
         return this.usersRepository.save(user)
@@ -26,13 +25,15 @@ export class UsersService {
     }
 
     async findById(user_id): Promise<User> {
-        const user = await this.usersRepository.findOne(user_id, {
-            select: ["id", "firstname", "lastname", "email", "city", "street", "house_num", "flat_num", "telegram_username"]
-        })
+        const user = await this.usersRepository.findOne(user_id)
         console.log("UserService.findByID()", user)
         return user
     }
 
+}
+        // const user = await this.usersRepository.findOne(user_id, {
+        //     select: ["id", "firstname", "lastname", "email", "city", "street", "house_num", "flat_num", "telegram_username"]
+        // })
     // findAll(): Promise<User[]> {
     //     return this.usersRepository.find();
     // }
@@ -41,4 +42,3 @@ export class UsersService {
     // async remove(id: string): Promise<void> {
     //     await this.usersRepository.delete(id)
     // }
-}
