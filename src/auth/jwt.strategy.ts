@@ -7,7 +7,8 @@ import {jwtConstants} from "./constants";
 export class JwtStrategy extends PassportStrategy(Strategy){
     constructor() {
         super({
-            jwtFromRequest: ExtractJwt.fromBodyField("access_token"),
+            // jwtFromRequest: ExtractJwt.fromBodyField("access_token"),
+            jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             // ignoreExpiration: false,
             ignoreExpiration: true,
             secretOrKey: jwtConstants.secret
@@ -16,7 +17,7 @@ export class JwtStrategy extends PassportStrategy(Strategy){
     }
 
     async validate(payload: any) {
-        console.log("JwtStrategy.validate() payload:", payload)
+        console.log("Class: JwtStrategy\nMethod: validate()\nMessage: payload:", payload, "\n")
         return { id: payload.sub, email: payload.email}
     }
 

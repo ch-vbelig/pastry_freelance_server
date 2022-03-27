@@ -1,7 +1,7 @@
-import {Body, Controller, Post, UseGuards} from "@nestjs/common";
+import {Body, Controller, Post, Request, UseGuards} from "@nestjs/common";
 import {OrdersService} from "./orders.service";
-import {Order} from "./entities/order.entity";
 import {JwtAuthGuard} from "../auth/jwt-auth.guard";
+import {OrderCreateDto} from "./dto/OrderCreateDto";
 
 @Controller("orders")
 export class OrdersController{
@@ -10,8 +10,14 @@ export class OrdersController{
     }
 
     @UseGuards(JwtAuthGuard)
-    @Post()
-    saveOrder(@Body() order){
-        return this.ordersService.saveOrder(order)
+    @Post("create")
+    saveOrder(@Request() req, @Body() order: OrderCreateDto){
+        console.log("Class: OrdersController\nMethod: saveOrder()\nMessage: User from token:", req.user, "\n")
+        return this.ordersService.saveOrder(req.user.id, order)
+    }
+
+    @Post("show")
+    getAllOrders(){
+        return this.ordersService.getAllOrders()
     }
 }

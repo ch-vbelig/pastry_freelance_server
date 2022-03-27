@@ -17,9 +17,8 @@ export class LocalStrategy extends PassportStrategy(Strategy){
             throw new UnauthorizedException();
         }
         return {
-            access_token: this.authService.generateAccessToken(user)
+            access_token: this.authService.login(user)
         }
-
     }
 
 

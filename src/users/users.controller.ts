@@ -2,14 +2,14 @@ import {Body, Controller, Get, Param, Post, Request, UseGuards} from "@nestjs/co
 import {UsersService} from "./users.service";
 import {LocalAuthGuard} from "../auth/local-auth.guard";
 import {JwtAuthGuard} from "../auth/jwt-auth.guard";
+import {AuthService} from "../auth/auth.service";
 
 @Controller('users')
 export class UsersController {
 
     constructor(
         private readonly usersService: UsersService,
-    ) {
-    }
+    ) {}
 
     @Post("register")
     async registerUser(@Body() user){

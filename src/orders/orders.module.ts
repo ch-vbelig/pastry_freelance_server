@@ -1,16 +1,17 @@
-import {Module} from "@nestjs/common";
+import { Module} from "@nestjs/common";
 import {OrdersService} from "./orders.service";
 import {OrdersController} from "./orders.controller";
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {Order} from "./entities/order.entity";
 import {UsersModule} from "../users/users.module";
-import {Filler} from "./entities/filler.entity";
-import {Style} from "./entities/style.entity";
-import {Decorator} from "./entities/decorator.entity";
 import {Type} from "./entities/type.entity";
+import {Form} from "./entities/form.entity";
+import {Body} from "./entities/body.entity";
+import {Topping} from "./entities/topping.entity";
+import {Cream} from "./entities/cream.entity";
 
 @Module({
-    imports: [UsersModule, TypeOrmModule.forFeature([Order, Type, Filler, Style, Decorator])],
+    imports: [UsersModule, TypeOrmModule.forFeature([Order, Type, Form, Body, Topping, Cream])],
     controllers: [OrdersController],
     providers: [OrdersService]
 })

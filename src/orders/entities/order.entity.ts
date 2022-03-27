@@ -1,9 +1,10 @@
 import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {User} from "../../users/user.entity";
 import {Type} from "./type.entity";
-import {Filler} from "./filler.entity";
-import {Decorator} from "./decorator.entity";
-import {Style} from "./style.entity";
+import {Form} from "./form.entity";
+import {Body} from "./body.entity";
+import {Topping} from "./topping.entity";
+import {Cream} from "./cream.entity";
 
 @Entity()
 export class Order {
@@ -19,16 +20,19 @@ export class Order {
     @ManyToOne(type => Type, type => type.orders)
     type: Type
 
-    @ManyToOne(type => Filler, filler => filler.orders)
-    filler: Filler
+    @ManyToOne(type => Form, form => form.orders)
+    form: Form
 
-    @ManyToOne(type => Decorator, decorator => decorator.orders)
-    decorator: Decorator
+    @ManyToOne(type => Body, body => body.orders)
+    body: Body
 
-    @ManyToOne(type => Style, style => style.orders)
-    style: Style
+    @ManyToOne(type => Topping, topping => topping.orders)
+    topping: Topping
 
-    @Column()
+    @ManyToOne(type => Cream, cream => cream.orders)
+    cream: Cream
+
+    @Column({nullable: true})
     price: number
 
     @Column({default: new Date()})
@@ -37,7 +41,7 @@ export class Order {
     @Column({nullable: true})
     delivery_date: Date
 
-    @Column()
+    @Column({nullable: true})
     amount: number
 
     @Column({nullable: true})

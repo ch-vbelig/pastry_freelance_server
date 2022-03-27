@@ -2,20 +2,21 @@ import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {Order} from "./order.entity";
 
 @Entity()
-export class Filler{
-    constructor(filler_tag) {
-        this.filler_tag = filler_tag
-    }
-
+export class Cream{
     @PrimaryGeneratedColumn()
     id: number
 
     @Column({unique: true})
-    filler_tag: string
+    cream_tag: string
 
     @Column({nullable : true})
-    filler_name: string
+    cream_name: string
 
-    @OneToMany(type => Order, order => order.filler)
+    @OneToMany(type => Order, order => order.cream)
     orders: Order[]
+
+    constructor(cream_tag) {
+        this.cream_tag = cream_tag
+    }
+
 }

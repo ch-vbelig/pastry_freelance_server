@@ -2,22 +2,21 @@ import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {Order} from "./order.entity";
 
 @Entity()
-export class Style{
-    constructor(style_tag) {
-        this.style_tag = style_tag
-
-    }
-
+export class Topping{
     @PrimaryGeneratedColumn()
     id: number
 
     @Column({unique: true})
-    style_tag: string
+    topping_tag: string
 
     @Column({nullable : true})
-    style_name: string
+    topping_name: string
 
-    @OneToMany(type => Order, order => order.style)
+    @OneToMany(type => Order, order => order.topping)
     orders: Order[]
+
+    constructor(topping_tag) {
+        this.topping_tag = topping_tag
+    }
 
 }

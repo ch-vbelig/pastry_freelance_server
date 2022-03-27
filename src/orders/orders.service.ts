@@ -2,12 +2,13 @@ import {Injectable, UnauthorizedException} from "@nestjs/common";
 import {InjectRepository} from "@nestjs/typeorm";
 import {Order} from "./entities/order.entity";
 import {Repository} from "typeorm";
-import {Filler} from "./entities/filler.entity";
-import {Decorator} from "./entities/decorator.entity";
 import {Type} from "./entities/type.entity";
-import {Style} from "./entities/style.entity";
-import {User} from "../users/user.entity";
 import {UsersService} from "../users/users.service";
+import {Form} from "./entities/form.entity";
+import {Body} from "./entities/body.entity";
+import {Topping} from "./entities/topping.entity";
+import {Cream} from "./entities/cream.entity";
+import {OrderCreateDto} from "./dto/OrderCreateDto";
 
 @Injectable()
 export class OrdersService {
@@ -15,19 +16,21 @@ export class OrdersService {
     constructor(
         @InjectRepository(Order) private orderRepository: Repository<Order>,
         @InjectRepository(Type) private typeRepository: Repository<Type>,
-        @InjectRepository(Filler) private fillerRepository: Repository<Filler>,
-        @InjectRepository(Decorator) private decoratorRepository: Repository<Decorator>,
-        @InjectRepository(Style) private styleRepository: Repository<Style>,
+        @InjectRepository(Form) private formRepository: Repository<Form>,
+        @InjectRepository(Body) private bodyRepository: Repository<Body>,
+        @InjectRepository(Topping) private toppingRepository: Repository<Topping>,
+        @InjectRepository(Cream) private creamRepository: Repository<Cream>,
         private userService: UsersService,
     ) {
     }
 
-    async saveOrder(order) {
+    async saveOrder(user_id: number, order: OrderCreateDto) {
         let type = await this.typeRepository.findOne({type_tag: order.type_tag})
-        let filler = await this.fillerRepository.findOne({filler_tag: order.filler_tag})
-        let decorator = await this.decoratorRepository.findOne({decorator_tag: order.decorator_tag})
-        let style = await this.styleRepository.findOne({style_tag: order.style_tag})
-        let user = await this.userService.findById(order.user_id)
+        let form = await this.formRepository.findOne({form_tag: order.form_tag})
+        let body = await this.bodyRepository.findOne({body_tag: order.body_tag})
+        let topping = await this.toppingRepository.findOne({topping_tag: order.topping_tag})
+        let cream = await this.creamRepository.findOne({cream_tag: order.cream_tag})
+        let user = await this.userService.findById(user_id)
         if (!user){
             throw new UnauthorizedException()
         }
@@ -35,19 +38,22 @@ export class OrdersService {
         let newOrder = new Order()
         newOrder.user = user
         newOrder.type = type ? type : await this.typeRepository.save( new Type(order.type_tag))
-        newOrder.filler = filler ? filler : await this.fillerRepository.save(new Filler(order.filler_tag))
-        newOrder.decorator = decorator ? decorator : await this.decoratorRepository.save(new Decorator(order.decorator_tag))
-        newOrder.style = style ? style : await this.styleRepository.save(new Style(order.style_tag))
+        newOrder.form = form ? form : await this.formRepository.save(new Form(order.form_tag))
+        newOrder.body = body ? body : await this.bodyRepository.save(new Body(order.body_tag))
+        newOrder.topping = topping ? topping : await this.toppingRepository.save(new Topping(order.topping_tag))
+        newOrder.cream = cream ? cream : await this.creamRepository.save(new Cream(order.cream_tag))
         newOrder.user = user
-        newOrder.amount = order.amount
-        newOrder.price = order.price
-        newOrder.comment = order.comment
         newOrder.date = new Date()
 
         const createdOrder = await this.orderRepository.save(newOrder)
 
-        const result = this.orderRepository.findOne(createdOrder.id, {relations: ["user", "type"]})
+        const result = this.orderRepository.findOne(createdOrder.id, {relations: ["user", "type", "form", "body", "topping", "cream"]})
 
+        return result
+    }
+
+    async getAllOrders(){
+        const result = await this.orderRepository.find({relations: ["user", "type", "form", "body", "topping", "cream"]})
         return result
     }
 }

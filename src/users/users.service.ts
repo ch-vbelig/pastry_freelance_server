@@ -20,13 +20,13 @@ export class UsersService {
             {email: email},
             {select: ["id", "email", "password"]}
         )
-        console.log("UserService.findByEmail()", userCredentials)
+        console.log("Class: UserService\nMethod: findByEmail()\nMessage: ", userCredentials, "\n")
         return userCredentials
     }
 
     async findById(user_id): Promise<User> {
-        const user = await this.usersRepository.findOne(user_id)
-        console.log("UserService.findByID()", user)
+        const user = await this.usersRepository.findOne(user_id, { relations: ["created_orders", "responded_orders"]})
+        console.log("Class: UserService\nMethod: findByID()\nMessage:", user, "\n")
         return user
     }
 
