@@ -41,5 +41,4 @@ export class User {
     @OneToMany(type=> Order, order => order.baker, {nullable: true})
     responded_orders: Order[]
 
-    
 }

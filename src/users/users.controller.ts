@@ -19,6 +19,7 @@ export class UsersController {
     @UseGuards(LocalAuthGuard)
     @Post("login")
     async loginUser(@Request() req) {
+        console.log(req)
         // return access_token
         return req.user.access_token
     }
